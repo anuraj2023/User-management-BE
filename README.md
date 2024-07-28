@@ -2,6 +2,11 @@
 
 This is a simple Node.js application that demonstrates CRUD (Create, Read, Update, Delete) operations along with a mailing functionality using MongoDB as the database.
 
+## Deployed version
+
+You may checkout the deployed app API here: <br>
+https://user-management-be-lgf8.onrender.com/api-docs/
+
 ## Getting Started
 
 1. Clone the repository:
