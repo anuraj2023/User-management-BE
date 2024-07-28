@@ -31,6 +31,7 @@ This is a simple Node.js application that demonstrates CRUD (Create, Read, Updat
 5. Access the application:
 
    Open your web browser and navigate to `http://localhost:8080` to access the API endpoints.
+   Swagger API documentation is available here: `http://localhost:8000/api-docs/` 
 
 ## Endpoints
 

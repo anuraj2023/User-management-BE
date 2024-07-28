@@ -14,8 +14,6 @@ const routes = (app) => {
 
   router.delete("/:id", users.remove);
 
-  router.post("/mail/sendMail", users.SendMail);
-
   app.use("/api/users", router);
 };
 export default routes;

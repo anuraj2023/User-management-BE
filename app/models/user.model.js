@@ -1,18 +1,17 @@
 import mongoose from "mongoose";
-import mongooseSequence from "mongoose-sequence";
+import autoIncrement from "mongoose-plugin-autoinc";
 
-const AutoIncrement = mongooseSequence(mongoose);
 const { Schema } = mongoose;
+
 const userSchema = new Schema({
   name: {
     type: String,
-
     required: [true, "Please give name of the user"],
   },
   phoneNumber: {
     type: String,
     required: true,
-    min: [10, "Please give all 10 digits !"],
+    minlength: [10, "Please give all 10 digits!"],
   },
   email: {
     type: String,
@@ -23,13 +22,20 @@ const userSchema = new Schema({
     required: [true, "Please give hobbies of the user"],
   },
 });
-userSchema.plugin(AutoIncrement, { inc_field: "id" });
-const createUserModel = (mongoose) => {
-  const User = mongoose.model(
-    "User",
-    mongoose.Schema(userSchema, { timestamps: true })
-  );
 
+// AutoIncrement
+autoIncrement.initialize(mongoose.connection);
+userSchema.plugin(autoIncrement.plugin, {
+  model: 'User', 
+  field: 'id', 
+  startAt: 1, 
+  incrementBy: 1, 
+});
+
+// Create User model
+const createUserModel = (mongoose) => {
+  const User = mongoose.model("User", userSchema);
   return User;
 };
+
 export default createUserModel;

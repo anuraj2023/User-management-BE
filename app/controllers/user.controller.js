@@ -3,6 +3,40 @@ import db from "../models/index.js";
 
 const User = db.users;
 
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ *     description: Creates a new user with the provided information
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - phoneNumber
+ *               - email
+ *               - hobbies
+ *             properties:
+ *               name:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               hobbies:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User created successfully
+ *       400:
+ *         description: All fields are required
+ *       500:
+ *         description: Some error occurred while creating the User
+ */
 export const create = (req, res) => {
   console.log("Req :", req);
   // Validate request
@@ -36,6 +70,24 @@ export const create = (req, res) => {
     });
 };
 
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Retrieve all users
+ *     description: Get a list of all users
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some error occurred while retrieving users
+ */
 export const findAll = (req, res) => {
   User.find({})
     .then((data) => {
@@ -48,6 +100,31 @@ export const findAll = (req, res) => {
     });
 };
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     description: Retrieve a single user by their ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Error retrieving User
+ */
 export const findOne = (req, res) => {
   const id = req.params.id;
 
@@ -68,6 +145,33 @@ export const findOne = (req, res) => {
     });
 };
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     description: Update a user's information by their ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User was updated successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Error updating User
+ */
 export const update = (req, res) => {
   const id = req.params.id;
   const update = {
@@ -93,6 +197,27 @@ export const update = (req, res) => {
     });
 };
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user
+ *     description: Delete a user by their ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User was deleted successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Could not delete user
+ */
 export const remove = (req, res) => {
   const id = req.params.id;
 
@@ -115,47 +240,31 @@ export const remove = (req, res) => {
     });
 };
 
-export const SendMail = (req, res) => {
-  console.log("email:", process.env.GMAIL_USERNAME);
-  console.log("email:", process.env.GMAIL_APP_PASSWORD);
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USERNAME,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-  const data = req.body;
-  console.log("data", data.emailData);
-
-  let htmlContent = '<table border="1">';
-  htmlContent +=
-    "<tr><th>Name</th><th>Phone Number</th><th>Email</th><th>Hobbies</th></tr>";
-  data.emailData.forEach((item) => {
-    htmlContent += `<tr><td>${item.name}</td><td>${item.phoneNumber}</td><td>${item.email}</td><td>${item.hobbies}</td></tr>`;
-  });
-  htmlContent += "</table>";
-  console.log("html Content", htmlContent);
-
-  let mailOptions = {
-    from: process.env.GMAIL_USERNAME,
-    to: process.env.RECIPIENT_USER,
-    subject: "Test Email from Node.js",
-    html: htmlContent,
-  };
-  transporter
-    .sendMail(mailOptions)
-    .then((data) => {
-      console.log("email sent");
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log("error", err);
-      res.status(500).send({
-        message: err.message || "Failed to send mail",
-      });
-    });
-};
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - phoneNumber
+ *         - email
+ *         - hobbies
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *         name:
+ *           type: string
+ *           description: The name of the user
+ *         phoneNumber:
+ *           type: string
+ *           description: The phone number of the user
+ *         email:
+ *           type: string
+ *           description: The email of the user
+ *         hobbies:
+ *           type: string
+ *           description: The hobbies of the user
+ */
