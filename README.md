@@ -19,7 +19,7 @@ This is a simple Node.js application that demonstrates CRUD (Create, Read, Updat
 
 3. Configure the database:
 
-   - Create a PostgreSQL database.
+   - Create a Mongo DB.
    - Update the `config/db.config.js` file with your database connection details.
 
 4. Run the application:
@@ -41,12 +41,3 @@ This is a simple Node.js application that demonstrates CRUD (Create, Read, Updat
 - `DELETE /api/users/:id`: Delete an user by id.
 - `POST /api/users/mail?/sendMail`: Send email containing user information to recipient.
 
-## Troubleshooting
-
-- If you encounter issues with database constraints or null values, double-check the model, controller, and database configuration for consistency.
-- Review the database integrity constraints and default values.
-- Use extensive logging to trace the flow of data and identify potential issues.
-
-## Contributing
-
-Contributions are welcome! If you find any bugs or want to add new features, feel free to open an issue or submit a pull request.
